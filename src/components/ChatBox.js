@@ -1,43 +1,56 @@
 import * as React from 'react';
-import List from 'material-ui/List';
-
+import {
+  List,
+  ListItem
+}
+from 'material-ui/List';
+import Avatar from 'material-ui/Avatar';
+import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
 
 export class ChatBox extends React.Component {
 
   constructor() {
     super();
+    this.state = {
+      messages: []
+    };
   }
 
-  compontentDidMount() {
-
+  componentWillMount() {
+    this.state.messages = [{
+      "username": "Ben",
+      "text": "Whaddup",
+      "avatar": "https://placehold.it/350x350",
+    }, {
+      "username": "Sue",
+      "text": "Yo",
+      "avatar": "https://placehold.it/350x350",
+    }, {
+      "username": "Guy",
+      "text": "Hello",
+      "avatar": "https://placehold.it/350x350",
+    }, ];
   }
 
   renderChatMessages() {
 
-  }
+    return this.state.messages.map((message, i) =>
+      <ListItem key={i} primaryText= {message.username}
+          secondaryText={message.text}
+          leftAvatar={<Avatar src={message.avatar} />
+    }
+    rightIcon = {
+      <CommunicationChatBubble />
+    }
+    />
+  );
+}
 
-  render() {
-    return (
-      <List>
-        <ListItem
-          primaryText="Brendan Lim"
-          secondaryText="Hello."
-          leftAvatar={<Avatar src="https://placehold.it/350x350" />}
-          rightIcon={<CommunicationChatBubble />}
-        />
-        <ListItem
-          primaryText="Eric Hoffman"
-          secondaryText="Sup."
-          leftAvatar={<Avatar src="https://placehold.it/350x350" />}
-          rightIcon={<CommunicationChatBubble />}
-        />
-        <ListItem
-          primaryText="Grace Ng"
-          secondaryText="Fam."
-          leftAvatar={<Avatar src="https://placehold.it/350x350" />}
-          rightIcon={<CommunicationChatBubble />}
-        />
+render() {
+  return (
+    <List>
+        {this.renderChatMessages()}
       </List>
-    );
-  }
+  );
+}
 }

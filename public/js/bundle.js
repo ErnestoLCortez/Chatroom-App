@@ -35598,7 +35598,28 @@ exports.default = ListItem;
 /* 403 */,
 /* 404 */,
 /* 405 */,
-/* 406 */,
+/* 406 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = undefined;
+
+var _Avatar = __webpack_require__(442);
+
+var _Avatar2 = _interopRequireDefault(_Avatar);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+exports.default = _Avatar2.default;
+
+/***/ }),
 /* 407 */,
 /* 408 */,
 /* 409 */,
@@ -35824,7 +35845,175 @@ exports.default = _Subheader2.default;
 /* 439 */,
 /* 440 */,
 /* 441 */,
-/* 442 */,
+/* 442 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends2 = __webpack_require__(18);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _objectWithoutProperties2 = __webpack_require__(19);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _getPrototypeOf = __webpack_require__(10);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(11);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(12);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(14);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(13);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _simpleAssign = __webpack_require__(16);
+
+var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function getStyles(props, context) {
+  var backgroundColor = props.backgroundColor,
+      color = props.color,
+      size = props.size;
+  var avatar = context.muiTheme.avatar;
+
+  var styles = {
+    root: {
+      color: color || avatar.color,
+      backgroundColor: backgroundColor || avatar.backgroundColor,
+      userSelect: 'none',
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontSize: size / 2,
+      borderRadius: '50%',
+      height: size,
+      width: size
+    },
+    icon: {
+      color: color || avatar.color,
+      width: size * 0.6,
+      height: size * 0.6,
+      fontSize: size * 0.6,
+      margin: size * 0.2
+    }
+  };
+
+  return styles;
+}
+
+var Avatar = function (_Component) {
+  (0, _inherits3.default)(Avatar, _Component);
+
+  function Avatar() {
+    (0, _classCallCheck3.default)(this, Avatar);
+    return (0, _possibleConstructorReturn3.default)(this, (Avatar.__proto__ || (0, _getPrototypeOf2.default)(Avatar)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(Avatar, [{
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          backgroundColor = _props.backgroundColor,
+          icon = _props.icon,
+          src = _props.src,
+          style = _props.style,
+          className = _props.className,
+          other = (0, _objectWithoutProperties3.default)(_props, ['backgroundColor', 'icon', 'src', 'style', 'className']);
+      var prepareStyles = this.context.muiTheme.prepareStyles;
+
+      var styles = getStyles(this.props, this.context);
+
+      if (src) {
+        return _react2.default.createElement('img', (0, _extends3.default)({
+          style: prepareStyles((0, _simpleAssign2.default)(styles.root, style))
+        }, other, {
+          src: src,
+          className: className
+        }));
+      } else {
+        return _react2.default.createElement('div', (0, _extends3.default)({}, other, {
+          style: prepareStyles((0, _simpleAssign2.default)(styles.root, style)),
+          className: className
+        }), icon && _react2.default.cloneElement(icon, {
+          color: styles.icon.color,
+          style: (0, _simpleAssign2.default)(styles.icon, icon.props.style)
+        }), this.props.children);
+      }
+    }
+  }]);
+  return Avatar;
+}(_react.Component);
+
+Avatar.muiName = 'Avatar';
+Avatar.defaultProps = {
+  size: 40
+};
+Avatar.contextTypes = {
+  muiTheme: _react.PropTypes.object.isRequired
+};
+process.env.NODE_ENV !== "production" ? Avatar.propTypes = {
+  /**
+   * The backgroundColor of the avatar. Does not apply to image avatars.
+   */
+  backgroundColor: _react.PropTypes.string,
+  /**
+   * Can be used, for instance, to render a letter inside the avatar.
+   */
+  children: _react.PropTypes.node,
+  /**
+   * The css class name of the root `div` or `img` element.
+   */
+  className: _react.PropTypes.string,
+  /**
+   * The icon or letter's color.
+   */
+  color: _react.PropTypes.string,
+  /**
+   * This is the SvgIcon or FontIcon to be used inside the avatar.
+   */
+  icon: _react.PropTypes.element,
+  /**
+   * This is the size of the avatar in pixels.
+   */
+  size: _react.PropTypes.number,
+  /**
+   * If passed in, this component will render an img element. Otherwise, a div will be rendered.
+   */
+  src: _react.PropTypes.string,
+  /**
+   * Override the inline-styles of the root element.
+   */
+  style: _react.PropTypes.object
+} : void 0;
+exports.default = Avatar;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
 /* 443 */,
 /* 444 */,
 /* 445 */,
@@ -37445,7 +37634,13 @@ var React = _interopRequireWildcard(_react);
 
 var _List = __webpack_require__(481);
 
-var _List2 = _interopRequireDefault(_List);
+var _Avatar = __webpack_require__(406);
+
+var _Avatar2 = _interopRequireDefault(_Avatar);
+
+var _chatBubble = __webpack_require__(555);
+
+var _chatBubble2 = _interopRequireDefault(_chatBubble);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -37463,45 +37658,92 @@ var ChatBox = exports.ChatBox = function (_React$Component) {
   function ChatBox() {
     _classCallCheck(this, ChatBox);
 
-    return _possibleConstructorReturn(this, (ChatBox.__proto__ || Object.getPrototypeOf(ChatBox)).call(this));
+    var _this = _possibleConstructorReturn(this, (ChatBox.__proto__ || Object.getPrototypeOf(ChatBox)).call(this));
+
+    _this.state = {
+      messages: []
+    };
+    return _this;
   }
 
   _createClass(ChatBox, [{
-    key: 'compontentDidMount',
-    value: function compontentDidMount() {}
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      this.state.messages = [{
+        "username": "Ben",
+        "text": "Whaddup",
+        "avatar": "https://placehold.it/350x350"
+      }, {
+        "username": "Sue",
+        "text": "Yo",
+        "avatar": "https://placehold.it/350x350"
+      }, {
+        "username": "Guy",
+        "text": "Hello",
+        "avatar": "https://placehold.it/350x350"
+      }];
+    }
   }, {
     key: 'renderChatMessages',
-    value: function renderChatMessages() {}
+    value: function renderChatMessages() {
+
+      return this.state.messages.map(function (message, i) {
+        return React.createElement(_List.ListItem, { key: i, primaryText: message.username,
+          secondaryText: message.text,
+          leftAvatar: React.createElement(_Avatar2.default, { src: message.avatar }),
+          rightIcon: React.createElement(_chatBubble2.default, null)
+        });
+      });
+    }
   }, {
     key: 'render',
     value: function render() {
       return React.createElement(
-        _List2.default,
+        _List.List,
         null,
-        React.createElement(ListItem, {
-          primaryText: 'Brendan Lim',
-          secondaryText: 'Hello.',
-          leftAvatar: React.createElement(Avatar, { src: 'https://placehold.it/350x350' }),
-          rightIcon: React.createElement(CommunicationChatBubble, null)
-        }),
-        React.createElement(ListItem, {
-          primaryText: 'Eric Hoffman',
-          secondaryText: 'Sup.',
-          leftAvatar: React.createElement(Avatar, { src: 'https://placehold.it/350x350' }),
-          rightIcon: React.createElement(CommunicationChatBubble, null)
-        }),
-        React.createElement(ListItem, {
-          primaryText: 'Grace Ng',
-          secondaryText: 'Fam.',
-          leftAvatar: React.createElement(Avatar, { src: 'https://placehold.it/350x350' }),
-          rightIcon: React.createElement(CommunicationChatBubble, null)
-        })
+        this.renderChatMessages()
       );
     }
   }]);
 
   return ChatBox;
 }(React.Component);
+
+/***/ }),
+/* 555 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _pure = __webpack_require__(236);
+
+var _pure2 = _interopRequireDefault(_pure);
+
+var _SvgIcon = __webpack_require__(222);
+
+var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+var CommunicationChatBubble = function CommunicationChatBubble(props) {
+  return _react2.default.createElement(_SvgIcon2.default, props, _react2.default.createElement('path', { d: 'M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z' }));
+};
+CommunicationChatBubble = (0, _pure2.default)(CommunicationChatBubble);
+CommunicationChatBubble.displayName = 'CommunicationChatBubble';
+CommunicationChatBubble.muiName = 'SvgIcon';
+
+exports.default = CommunicationChatBubble;
 
 /***/ })
 /******/ ]);
