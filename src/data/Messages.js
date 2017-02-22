@@ -11,3 +11,6 @@ export var messages = [{
   "text": "Hello",
   "avatar": "https://placehold.it/350x350",
 }, ];
+
+
+exports.messages = messages;

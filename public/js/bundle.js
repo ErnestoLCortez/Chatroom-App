@@ -38297,6 +38297,8 @@ var messages = exports.messages = [{
   "avatar": "https://placehold.it/350x350"
 }];
 
+exports.messages = messages;
+
 /***/ }),
 /* 558 */
 /***/ (function(module, exports, __webpack_require__) {
