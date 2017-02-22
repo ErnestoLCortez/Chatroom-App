@@ -1,5 +1,9 @@
 import * as React from 'react';
 import {
+  Socket
+}
+from './Socket';
+import {
   List,
   ListItem
 }
@@ -7,34 +11,21 @@ from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
 import {
-  messages
+  users
 }
-from '../data/Messages';
-import {
-  Socket
-}
-from './Socket.js';
+from '../data/Users';
 
-export class ChatBox extends React.Component {
-
-  constructor() {
-    super();
-    this.state = {
-      messages: messages
-    };
-
-  }
+export class UserList extends React.Component {
 
   componentDidMount() {
-    Socket.on('messages', function(messageList) {
-      this.state.messages = messageList;
+    Socket.on('connect', function(data) {
+      var nickname = prompt("Username?");
+      Socket.emit('join', nickname);
     });
-
   }
 
   renderChatMessages() {
-
-    return messages.map((message, i) =>
+    return this.state.messages.map((message, i) =>
       <ListItem key={i} primaryText= {message.username}
           secondaryText={message.text}
           leftAvatar={<Avatar src={message.avatar} />
@@ -49,8 +40,8 @@ export class ChatBox extends React.Component {
 render() {
   return (
     <List>
-      {this.renderChatMessages()}
-    </List>
+        {this.renderChatMessages()}
+      </List>
   );
 }
 }

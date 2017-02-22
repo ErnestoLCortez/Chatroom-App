@@ -3,34 +3,38 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
-var messages = [];
+var messages = require('src/data/Messages');
 
-var storeMessage = function(name, data){
-  messages.push({name: name, data: data});
-  if (messages.length > 10){
-      messages.shift();
+var storeMessage = function(message) {
+  messages.push({
+    username: message['username'],
+    text: message['text'],
+    avatar: message['avatar']
+  });
+  if (messages.length > 10) {
+    messages.shift();
   }
 }
 
-io.on('connection', function(client){
-  
+io.on('connection', function(client) {
+
   console.log('Client connected...');
-  
-  client.on('messages', function(message){
-    client.get("nickname", function(error, name){
-      client.broadcast.emit("messages", name + ": " + message);
-      client.emit("messages", name + ": " + message);
-      storeMessage(name, message);
-    });  
+
+  client.on('messages', function(message) {
+
+    storeMessage(message);
+    client.broadcast.emit("messages", messages);
+    client.emit("messages", messages);
   });
-  
-  client.on('join', function(name){
+
+  client.on('join', function(name) {
+    client.username = name;
     messages.forEach(function(message) {
       client.emit("messages", message.name + ": " + message.data)
     });
   });
-  
-  client.on('disconnect', function(name){
+
+  client.on('disconnect', function(name) {
     console.log(name + " disconnected");
   });
 });
@@ -39,6 +43,6 @@ app.use(express.static(__dirname + '/public'));
 app.set('port', process.env.PORT);
 app.set('IP', process.env.IP)
 
-server.listen(process.env.PORT, function (){
+server.listen(process.env.PORT, function() {
   console.log('Server listening on port %d in %s mode', app.get('port'), app.get('env'));
 });
