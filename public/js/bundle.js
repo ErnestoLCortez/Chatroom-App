@@ -38280,10 +38280,7 @@ exports.default = CommunicationChatBubble;
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var messages = exports.messages = [{
+var messages = [{
   "username": "Ben",
   "text": "Whaddup",
   "avatar": "https://placehold.it/350x350"

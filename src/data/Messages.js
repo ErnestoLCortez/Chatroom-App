@@ -1,4 +1,4 @@
-export var messages = [{
+var messages = [{
   "username": "Ben",
   "text": "Whaddup",
   "avatar": "https://placehold.it/350x350",
