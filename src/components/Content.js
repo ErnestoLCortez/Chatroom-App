@@ -71,7 +71,9 @@ export class Content extends React.Component {
       Socket.emit("messages", message);
       console.log(message);
     }
-
+    this.setState({
+      textFieldValue: ""
+    });
     event.preventDefault();
   }
 

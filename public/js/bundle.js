@@ -16504,7 +16504,9 @@ var Content = exports.Content = function (_React$Component) {
         _Socket.Socket.emit("messages", message);
         console.log(message);
       }
-
+      this.setState({
+        textFieldValue: ""
+      });
       event.preventDefault();
     }
   }, {
@@ -46063,6 +46065,7 @@ var ChatBox = exports.ChatBox = function (_React$Component) {
     };
     _this.receiveMessage = _this.receiveMessage.bind(_this);
     _this.receiveMessages = _this.receiveMessages.bind(_this);
+    _this.renderChatMessages = _this.renderChatMessages.bind(_this);
     return _this;
   }
 
@@ -46075,7 +46078,8 @@ var ChatBox = exports.ChatBox = function (_React$Component) {
   }, {
     key: 'receiveMessages',
     value: function receiveMessages(messages) {
-      console.log(messages);
+      console.log("Client received:" + messages);
+      messages.reverse();
       this.setState({
         messages: messages
       });

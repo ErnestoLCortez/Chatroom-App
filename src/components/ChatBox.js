@@ -20,6 +20,7 @@ export class ChatBox extends React.Component {
     };
     this.receiveMessage = this.receiveMessage.bind(this);
     this.receiveMessages = this.receiveMessages.bind(this);
+    this.renderChatMessages = this.renderChatMessages.bind(this);
   }
 
   componentDidMount() {
@@ -28,7 +29,8 @@ export class ChatBox extends React.Component {
   }
 
   receiveMessages(messages) {
-    console.log(messages);
+    console.log("Client received:" + messages);
+    messages.reverse();
     this.setState({
       messages: messages
     });

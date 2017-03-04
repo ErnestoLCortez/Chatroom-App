@@ -1,39 +1,52 @@
+require('babel-register');
+
+var Sequelize = require('sequelize');
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
-var messages = require('./src/data/Messages').messages;
+var Messages = require('./src/data/Messages').Messages;
 
 var storeMessage = function(message) {
-  messages.push({
+  //messages.push({
+  Messages.create({
     username: message['username'],
     text: message['text'],
-    avatar: message['avatar']
+    avatar: message['avatar'],
+    time: Sequelize.fn('NOW'),
   });
 
-  if (messages.length > 10) {
-    messages.shift();
-  }
+}
+
+var retreiveMessages = function(client) {
+  Messages.findAll({
+    limit: 10,
+    order: [
+      ['time', 'DESC']
+    ],
+  }).then(function(messages) {
+    client.emit('initMessages', messages);
+  });
 }
 
 io.on('connection', function(client) {
 
   console.log('Client connected...');
-  client.emit('initMessages', messages)
+
+  retreiveMessages(client);
 
   client.on('messages', function(message) {
     storeMessage(message);
-    console.log(messages)
     client.broadcast.emit("messages", message);
     client.emit("messages", message);
   });
 
   client.on('join', function(name) {
-    client.username = name;
-    messages.forEach(function(message) {
-      client.emit("messages", message.name + ": " + message.data)
-    });
+    // client.username = name;
+    // messages.forEach(function(message) {
+    //   client.emit("messages", message.name + ": " + message.data)
+    // });
   });
 
   client.on('disconnect', function(name) {
