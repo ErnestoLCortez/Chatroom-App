@@ -7,10 +7,6 @@ from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
 import {
-  messages
-}
-from '../data/Messages';
-import {
   Socket
 }
 from './Socket.js';
@@ -20,21 +16,37 @@ export class ChatBox extends React.Component {
   constructor() {
     super();
     this.state = {
-      messages: messages
+      messages: []
     };
-
+    this.receiveMessage = this.receiveMessage.bind(this);
+    this.receiveMessages = this.receiveMessages.bind(this);
   }
 
   componentDidMount() {
-    Socket.on('messages', function(messageList) {
-      this.state.messages = messageList;
-    });
+    Socket.on('initMessages', this.receiveMessages)
+    Socket.on('messages', this.receiveMessage);
+  }
 
+  receiveMessages(messages) {
+    console.log(messages);
+    this.setState({
+      messages: messages
+    });
+  }
+
+  receiveMessage(message) {
+    var {
+      messages
+    } = this.state;
+    messages.push(message);
+    this.setState({
+      messages
+    });
   }
 
   renderChatMessages() {
-
-    return messages.map((message, i) =>
+    console.log(this.state.messages);
+    return this.state.messages.map((message, i) =>
       <ListItem key={i} primaryText= {message.username}
           secondaryText={message.text}
           leftAvatar={<Avatar src={message.avatar} />

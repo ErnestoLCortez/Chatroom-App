@@ -27,6 +27,16 @@ const styles = {
   textStyle: {
     maxWidth: '80%',
   },
+  inputStyle: {
+    cursor: 'pointer',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    width: '100%',
+    opacity: 0,
+  },
 };
 
 
@@ -38,22 +48,31 @@ export class Content extends React.Component {
     this.state = {
       textFieldValue: '',
     };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleTextFieldChange(e) {
-    this.state.textFieldValue = e.target.value;
+  handleChange(event) {
+    this.setState({
+      textFieldValue: event.target.value
+    });
+
   }
 
-  sendMessage() {
+  handleSubmit(event) {
     if (this.state.textFieldValue) {
 
       var message = {
-        username: test,
+        username: 'test',
         text: this.state.textFieldValue,
         avatar: "https://placehold.it/350x350"
       }
       Socket.emit("messages", message);
+      console.log(message);
     }
+
+    event.preventDefault();
   }
 
   render() {
@@ -66,13 +85,16 @@ export class Content extends React.Component {
         <br />
         <ChatBox />
         <br />
-        <div style={styles.rowStyle}>
+        <form onSubmit={this.handleSubmit} style={styles.rowStyle}>
           <TextField
-            hintText="Message Group"
-            onChange={this.handleTextFieldChange}
+            id='textField'
+            onChange={this.handleChange}
+            value={this.state.textFieldValue}
           />
-          <RaisedButton label="Send" primary={true} style={styles.buttonStyle} onClick={this.sendMessage()}/>
-        </div>
+          <RaisedButton label="Send" primary={true} style={styles.buttonStyle}>
+            <input type="submit" style={styles.inputStyle}/>
+          </RaisedButton>
+        </form>
       </div>
     );
   }

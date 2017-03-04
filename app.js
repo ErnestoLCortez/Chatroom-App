@@ -11,6 +11,7 @@ var storeMessage = function(message) {
     text: message['text'],
     avatar: message['avatar']
   });
+
   if (messages.length > 10) {
     messages.shift();
   }
@@ -19,12 +20,13 @@ var storeMessage = function(message) {
 io.on('connection', function(client) {
 
   console.log('Client connected...');
+  client.emit('initMessages', messages)
 
   client.on('messages', function(message) {
-
     storeMessage(message);
-    client.broadcast.emit("messages", messages);
-    client.emit("messages", messages);
+    console.log(messages)
+    client.broadcast.emit("messages", message);
+    client.emit("messages", message);
   });
 
   client.on('join', function(name) {

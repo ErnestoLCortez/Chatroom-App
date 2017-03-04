@@ -16454,6 +16454,16 @@ var styles = {
   },
   textStyle: {
     maxWidth: '80%'
+  },
+  inputStyle: {
+    cursor: 'pointer',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    width: '100%',
+    opacity: 0
   }
 };
 
@@ -16468,26 +16478,34 @@ var Content = exports.Content = function (_React$Component) {
     _this.state = {
       textFieldValue: ''
     };
+
+    _this.handleChange = _this.handleChange.bind(_this);
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
     return _this;
   }
 
   _createClass(Content, [{
-    key: 'handleTextFieldChange',
-    value: function handleTextFieldChange(e) {
-      this.state.textFieldValue = e.target.value;
+    key: 'handleChange',
+    value: function handleChange(event) {
+      this.setState({
+        textFieldValue: event.target.value
+      });
     }
   }, {
-    key: 'sendMessage',
-    value: function sendMessage() {
+    key: 'handleSubmit',
+    value: function handleSubmit(event) {
       if (this.state.textFieldValue) {
 
         var message = {
-          username: test,
+          username: 'test',
           text: this.state.textFieldValue,
           avatar: "https://placehold.it/350x350"
         };
         _Socket.Socket.emit("messages", message);
+        console.log(message);
       }
+
+      event.preventDefault();
     }
   }, {
     key: 'render',
@@ -16503,13 +16521,18 @@ var Content = exports.Content = function (_React$Component) {
         React.createElement(_ChatBox.ChatBox, null),
         React.createElement('br', null),
         React.createElement(
-          'div',
-          { style: styles.rowStyle },
+          'form',
+          { onSubmit: this.handleSubmit, style: styles.rowStyle },
           React.createElement(_TextField2.default, {
-            hintText: 'Message Group',
-            onChange: this.handleTextFieldChange
+            id: 'textField',
+            onChange: this.handleChange,
+            value: this.state.textFieldValue
           }),
-          React.createElement(_RaisedButton2.default, { label: 'Send', primary: true, style: styles.buttonStyle, onClick: this.sendMessage() })
+          React.createElement(
+            _RaisedButton2.default,
+            { label: 'Send', primary: true, style: styles.buttonStyle },
+            React.createElement('input', { type: 'submit', style: styles.inputStyle })
+          )
         )
       );
     }
@@ -46015,8 +46038,6 @@ var _chatBubble = __webpack_require__(340);
 
 var _chatBubble2 = _interopRequireDefault(_chatBubble);
 
-var _Messages = __webpack_require__(457);
-
 var _Socket = __webpack_require__(188);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -46038,24 +46059,42 @@ var ChatBox = exports.ChatBox = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (ChatBox.__proto__ || Object.getPrototypeOf(ChatBox)).call(this));
 
     _this.state = {
-      messages: _Messages.messages
+      messages: []
     };
-
+    _this.receiveMessage = _this.receiveMessage.bind(_this);
+    _this.receiveMessages = _this.receiveMessages.bind(_this);
     return _this;
   }
 
   _createClass(ChatBox, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      _Socket.Socket.on('messages', function (messageList) {
-        this.state.messages = messageList;
+      _Socket.Socket.on('initMessages', this.receiveMessages);
+      _Socket.Socket.on('messages', this.receiveMessage);
+    }
+  }, {
+    key: 'receiveMessages',
+    value: function receiveMessages(messages) {
+      console.log(messages);
+      this.setState({
+        messages: messages
+      });
+    }
+  }, {
+    key: 'receiveMessage',
+    value: function receiveMessage(message) {
+      var messages = this.state.messages;
+
+      messages.push(message);
+      this.setState({
+        messages: messages
       });
     }
   }, {
     key: 'renderChatMessages',
     value: function renderChatMessages() {
-
-      return _Messages.messages.map(function (message, i) {
+      console.log(this.state.messages);
+      return this.state.messages.map(function (message, i) {
         return React.createElement(_List.ListItem, { key: i, primaryText: message.username,
           secondaryText: message.text,
           leftAvatar: React.createElement(_Avatar2.default, { src: message.avatar }),
@@ -46078,29 +46117,7 @@ var ChatBox = exports.ChatBox = function (_React$Component) {
 }(React.Component);
 
 /***/ }),
-/* 457 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var messages = [{
-  "username": "Ben",
-  "text": "Whaddup",
-  "avatar": "https://placehold.it/350x350"
-}, {
-  "username": "Sue",
-  "text": "Yo",
-  "avatar": "https://placehold.it/350x350"
-}, {
-  "username": "Guy",
-  "text": "Hello",
-  "avatar": "https://placehold.it/350x350"
-}];
-
-exports.messages = messages;
-
-/***/ }),
+/* 457 */,
 /* 458 */
 /***/ (function(module, exports) {
 
