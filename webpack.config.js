@@ -10,15 +10,15 @@ module.exports = {
         sourceMapFilename: "public/js/bundle.map"
     },
     devtool: '#source-map',
-    
+
     module: {
-        loaders: [
-            {
-                test: /\.jsx?$/,
-                loader: 'babel-loader',
-                query:{
-                    presets:['react', 'es2015', 'stage-1']
-                }
-            }]
+        loaders: [{
+            test: /\.jsx?$/,
+            exclude: [/node_modules/],
+            loader: 'babel-loader',
+            query: {
+                presets: ['react', 'es2015', 'stage-1']
+            }
+        }]
     }
 }

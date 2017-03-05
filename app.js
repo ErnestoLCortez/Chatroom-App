@@ -17,7 +17,7 @@ var storeMessage = function(message) {
     time: Sequelize.fn('NOW'),
   });
 
-}
+};
 
 var retreiveMessages = function(client) {
   Messages.findAll({
@@ -28,7 +28,7 @@ var retreiveMessages = function(client) {
   }).then(function(messages) {
     client.emit('initMessages', messages);
   });
-}
+};
 
 io.on('connection', function(client) {
 

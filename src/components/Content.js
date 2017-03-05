@@ -1,5 +1,6 @@
 import * as React from 'react';
 import AppBar from 'material-ui/AppBar';
+import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -12,9 +13,19 @@ import {
 }
 from './Socket.js';
 
-// Needed for onTouchTap
-// http://stackoverflow.com/a/34015469/988941
+import firebase from 'firebase';
+
+
+const config = {
+  apiKey: "AIzaSyBg45r2ODEEGbjJT4dlbd8q1RWqxyGUQGY",
+  authDomain: "cst438project2.firebaseapp.com",
+  databaseURL: "https://cst438project2.firebaseio.com",
+  storageBucket: "cst438project2.appspot.com",
+};
+
 injectTapEventPlugin();
+
+firebase.initializeApp(config);
 
 
 const styles = {
@@ -39,7 +50,6 @@ const styles = {
   },
 };
 
-
 export class Content extends React.Component {
 
 
@@ -47,10 +57,41 @@ export class Content extends React.Component {
     super();
     this.state = {
       textFieldValue: '',
+      user: null,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  loginWithFacebook() {
+    var provider = new firebase.auth.FacebookAuthProvider();
+    firebase.auth().signInWithPopup(provider).then(function(result) {
+      var token = result.credential.accessToken;
+      this.setState({
+        user: result.user
+      });
+      console.log(this.state.user);
+    }.bind(this));
+
+  }
+
+  loginWithGoogle() {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider).then(function(result) {
+      var token = result.credential.accessToken;
+      this.setState({
+        user: result.user
+      });
+    }.bind(this));
+  }
+
+  logOut() {
+    firebase.auth().signOut().then(function() {
+      this.setState({
+        user: null
+      });
+    }.bind(this));
   }
 
   handleChange(event) {
@@ -61,15 +102,14 @@ export class Content extends React.Component {
   }
 
   handleSubmit(event) {
-    if (this.state.textFieldValue) {
+    if (this.state.textFieldValue && this.state.user) {
 
       var message = {
-        username: 'test',
+        username: this.state.user.email,
         text: this.state.textFieldValue,
-        avatar: "https://placehold.it/350x350"
+        avatar: this.state.user.photoURL
       }
       Socket.emit("messages", message);
-      console.log(message);
     }
     this.setState({
       textFieldValue: ""
@@ -80,9 +120,14 @@ export class Content extends React.Component {
   render() {
     return (
       <div>
-        <AppBar
-          title="Cool Chat Thing"
-          iconClassNameRight="muidocs-icon-navigation-expand-more"
+        <AppBar 
+          title="Cool Chat"
+          iconElementRight={this.state.user ? 
+            <FlatButton label="SignOut" onClick={this.logOut.bind(this)}/> : 
+            <div>
+              <FlatButton label="Login with FB" onClick={this.loginWithFacebook.bind(this)} />
+              <FlatButton label="Login with Google" onClick={this.loginWithGoogle.bind(this)} />
+            </div>}
         />
         <br />
         <ChatBox />
@@ -92,8 +137,9 @@ export class Content extends React.Component {
             id='textField'
             onChange={this.handleChange}
             value={this.state.textFieldValue}
+            disabled={this.state.user ? false : true}
           />
-          <RaisedButton label="Send" primary={true} style={styles.buttonStyle}>
+          <RaisedButton label="Send" primary={this.state.user ? true : false} disabled={this.state.user ? false : true} style={styles.buttonStyle}>
             <input type="submit" style={styles.inputStyle}/>
           </RaisedButton>
         </form>
