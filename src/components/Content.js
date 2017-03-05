@@ -71,7 +71,6 @@ export class Content extends React.Component {
       this.setState({
         user: result.user
       });
-      console.log(this.state.user);
     }.bind(this));
 
   }

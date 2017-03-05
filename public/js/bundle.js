@@ -17451,7 +17451,6 @@ var Content = exports.Content = function (_React$Component) {
         this.setState({
           user: result.user
         });
-        console.log(this.state.user);
       }.bind(this));
     }
   }, {
