@@ -8,6 +8,8 @@ var io = require('socket.io')(server);
 
 var Messages = require('./src/data/Messages').Messages;
 
+var ChatBot = require('./src/bot/chatbot').ChatBot;
+
 var storeMessage = function(message) {
   //messages.push({
   Messages.create({
@@ -33,10 +35,19 @@ var retreiveMessages = function(client) {
 io.on('connection', function(client) {
 
   console.log('Client connected...');
-
   retreiveMessages(client);
 
   client.on('messages', function(message) {
+
+
+    var processing = ChatBot.processMessage(message);
+
+    if (processing.botMessage) {
+      client.broadcast.emit('messages', processing.botMessage);
+      client.emit('messages', processing.botMessage)
+
+    }
+
     storeMessage(message);
     client.broadcast.emit("messages", message);
     client.emit("messages", message);

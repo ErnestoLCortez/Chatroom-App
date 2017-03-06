@@ -46,17 +46,57 @@ export class ChatBox extends React.Component {
     });
   }
 
+  linkifyText(text) {
+    var LINK_DETECTION_REGEX = /^(([a-z]+:\/\/)?(([a-z0-9\-]+\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|local|internal))(:[0-9]{1,5})?(\/[a-z0-9_\-\.~]+)*(\/([a-z0-9_\-\.]*)(\?[a-z0-9+_\-\.%=&amp;]*)?)?(#[a-zA-Z0-9!$&'()*+.=-_~:@/?]*)?)($)/mi;
+    if (text.search(LINK_DETECTION_REGEX) != -1) {
+      if (text.substr(0, 4) === "http") {
+        return text;
+      }
+      else {
+        return "http://" + text;
+      }
+    }
+
+    return '#';
+  }
+
+  imigfyText(text) {
+    var IMG_DETECTION_REGEX = /^(([a-z]+:\/\/)?(([a-z0-9\-]+\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|local|internal))(:[0-9]{1,5})?(\/[a-z0-9_\-\.~]+)*(\/([a-z0-9_\-\.]*)(\?[a-z0-9+_\-\.%=&amp;]*)?)?(#[a-zA-Z0-9!$&'()*+.=-_~:@/?]*)?)(\.jpg|png|jpeg|gif)($)/mi;
+
+    if (text.search(IMG_DETECTION_REGEX) != -1) {
+      return <img src={text} style = {
+        {
+          height: 200
+        }
+      } />
+    }
+
+    if (this.linkifyText(text).substr(0, 4) == 'http') {
+      return <div style={{color:'#0000ff', textDecoration: 'underline'}}>
+      {text}
+      </div>
+    }
+
+    return text
+
+  }
+
   renderChatMessages() {
-    return this.state.messages.map((message, i) =>
-      <ListItem key={i} primaryText= {message.username}
-          secondaryText={message.text}
-          leftAvatar={<Avatar src={message.avatar} />
-    }
-    rightIcon = {
-      <CommunicationChatBubble />
-    }
-    />
-  );
+    return this.state.messages.map((message, i) => {
+
+        return <ListItem key={i} primaryText= {message.username}
+          secondaryText={this.imigfyText(message.text)}
+          leftAvatar={<Avatar src={message.avatar}/>
+      }
+      rightIcon = {
+        <CommunicationChatBubble />
+      }
+      href = {
+        this.linkifyText(message.text)
+      }
+      />;
+
+    });
 }
 
 render() {
