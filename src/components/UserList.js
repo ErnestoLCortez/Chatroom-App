@@ -3,45 +3,61 @@ import {
   Socket
 }
 from './Socket';
-import {
-  List,
-  ListItem
-}
-from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
-import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
-import {
-  users
-}
-from '../data/Users';
+import Chip from 'material-ui/Chip';
+
+
+const styles = {
+  chip: {
+    margin: 4,
+  },
+  wrapper: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+};
 
 export class UserList extends React.Component {
 
+  constructor() {
+    super();
+    this.state = {
+      userList: {},
+      userCount: 0,
+    };
+
+    this.updateUserList = this.updateUserList.bind(this);
+  }
   componentDidMount() {
-    Socket.on('connect', function(data) {
-      var nickname = prompt("Username?");
-      Socket.emit('join', nickname);
-    });
+    Socket.on('userlist', this.updateUserList);
   }
 
-  renderChatMessages() {
-    return this.state.messages.map((message, i) =>
-      <ListItem key={i} primaryText= {message.username}
-          secondaryText={message.text}
-          leftAvatar={<Avatar src={message.avatar} />
-    }
-    rightIcon = {
-      <CommunicationChatBubble />
-    }
-    />
-  );
-}
+  updateUserList(list) {
+    this.setState({
+      userList: list,
+      userCount: Object.keys(list).length,
+    });
+    console.log(list);
+  }
 
-render() {
-  return (
-    <List>
-        {this.renderChatMessages()}
-      </List>
-  );
-}
+  renderUserList() {
+
+    return Object.keys(this.state.userList).map((user, i) =>
+      <Chip key={i}
+        style={styles.chip}
+        >
+          <Avatar src={this.state.userList[user].avatar} />
+          {this.state.userList[user].username}
+        </Chip>
+    );
+  }
+
+  render() {
+    return (
+      <div style={styles.wrapper}>
+        User count: {this.state.userCount}
+        {this.renderUserList()}
+      </div>
+    );
+  }
 }

@@ -32,7 +32,9 @@ var retreiveMessages = function(client) {
   });
 };
 
+var userList = {}
 io.on('connection', function(client) {
+
 
   console.log('Client connected...');
   retreiveMessages(client);
@@ -53,15 +55,27 @@ io.on('connection', function(client) {
     client.emit("messages", message);
   });
 
-  client.on('join', function(name) {
-    // client.username = name;
-    // messages.forEach(function(message) {
-    //   client.emit("messages", message.name + ": " + message.data)
-    // });
+  client.on('join', function(userInfo) {
+
+    client.username = userInfo.username;
+    client.avatar = userInfo.avatar
+    userList[client.id] = {
+      username: userInfo.username,
+      avatar: userInfo.avatar
+    }
+    console.log(userList);
+
+    io.emit('messages', ChatBot.userConnect(client.username));
+    io.emit('userlist', userList);
+
   });
 
   client.on('disconnect', function(name) {
-    console.log(name + " disconnected");
+    delete userList[client.id];
+    io.emit('userlist', userList);
+    if (client.username) {
+      io.emit('messages', ChatBot.userDisconnect(client.username));
+    }
   });
 });
 

@@ -1,4 +1,6 @@
 import * as React from 'react';
+var ReactDOM = require('react-dom');
+import Infinite from 'react-infinite';
 import {
   List,
   ListItem
@@ -68,16 +70,16 @@ export class ChatBox extends React.Component {
         {
           height: 200
         }
-      } />
+      } />;
     }
 
     if (this.linkifyText(text).substr(0, 4) == 'http') {
       return <div style={{color:'#0000ff', textDecoration: 'underline'}}>
       {text}
-      </div>
+      </div>;
     }
 
-    return text
+    return text;
 
   }
 
@@ -99,11 +101,24 @@ export class ChatBox extends React.Component {
     });
 }
 
+componentDidUpdate() {
+  var node = ReactDOM.findDOMNode(this);
+  node.scrollTop = node.scrollHeight;
+}
+
 render() {
   return (
-    <List>
-      {this.renderChatMessages()}
-    </List>
+    <Infinite 
+         timeScrollStateLastsForAfterUserScrolls={1000}
+        containerHeight = {
+          window.innerHeight -200
+        }
+        elementHeight = {
+          51
+        }
+        displayBottomUpwards> 
+        {this.renderChatMessages()} 
+        </Infinite>
   );
 }
 }

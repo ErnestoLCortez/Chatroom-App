@@ -9,6 +9,10 @@ import {
 }
 from './ChatBox';
 import {
+  UserList
+}
+from './UserList';
+import {
   Socket
 }
 from './Socket.js';
@@ -71,6 +75,7 @@ export class Content extends React.Component {
       this.setState({
         user: result.user
       });
+      this.handleAuthenticate();
     }.bind(this));
 
   }
@@ -82,11 +87,20 @@ export class Content extends React.Component {
       this.setState({
         user: result.user
       });
+      this.handleAuthenticate();
     }.bind(this));
+  }
+
+  handleAuthenticate() {
+    Socket.emit('join', {
+      username: this.state.user.email,
+      avatar: this.state.user.photoURL
+    })
   }
 
   logOut() {
     firebase.auth().signOut().then(function() {
+      Socket.emit('disconnect', this.state.user.email)
       this.setState({
         user: null
       });
@@ -130,7 +144,7 @@ export class Content extends React.Component {
         />
         <br />
         <ChatBox />
-        <br />
+        <UserList />
         <form onSubmit={this.handleSubmit} style={styles.rowStyle}>
           <TextField
             id='textField'

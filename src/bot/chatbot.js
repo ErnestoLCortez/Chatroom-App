@@ -46,10 +46,27 @@ export var ChatBot = {
 
   },
 
+  userDisconnect: function(user) {
+    return {
+      username: "Bot",
+      text: user + " has left the channel.",
+      avatar: "img/robot.png",
+    };
+  },
+
+  userConnect: function(user) {
+    return {
+      username: "Bot",
+      text: user + " has entered the channel.",
+      avatar: "img/robot.png",
+    };
+  },
+
   botResponses: {
     about: "Description of chat app",
     invalid: "Unrecognized command"
   }
+
 
 
 };
