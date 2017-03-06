@@ -47,7 +47,6 @@ io.on('connection', function(client) {
     if (processing.botMessage) {
       client.broadcast.emit('messages', processing.botMessage);
       client.emit('messages', processing.botMessage)
-
     }
 
     storeMessage(message);
@@ -63,7 +62,7 @@ io.on('connection', function(client) {
       username: userInfo.username,
       avatar: userInfo.avatar
     }
-    console.log(userList);
+
 
     io.emit('messages', ChatBot.userConnect(client.username));
     io.emit('userlist', userList);
