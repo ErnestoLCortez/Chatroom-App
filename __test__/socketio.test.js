@@ -1,8 +1,3 @@
-import {
-  server
-}
-from '../app';
-
 import * as SocketIO from 'socket.io-client';
 
 var socketURL = "http://" + process.env.IP + ":" + process.env.PORT;

@@ -106,8 +106,8 @@ app.use(express.static(__dirname + '/public'));
 app.set('port', process.env.PORT || 8080);
 app.set('IP', process.env.IP || '0.0.0.0')
 
-server.listen(process.env.PORT, function() {
+var Server = server.listen(process.env.PORT, function() {
   console.log('Server listening on port %d in %s mode', app.get('port'), app.get('IP'));
 });
 
-module.exports = server;
+export default Server;
