@@ -7,13 +7,30 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
 var Messages = require('./src/data/Messages').Messages;
-
 var ChatBot = require('./src/bot/chatbot').ChatBot;
+var weather = require('npm-openweathermap');
+var openweatherkey = require('./src/config').openweatherkey;
+weather.api_key = openweatherkey;
+weather.temp = 'f';
 
-
+var fetchWeather = function(client, command) {
+  weather.get_weather_custom('zip', '93933', command)
+    .then(function(res) {
+      client.emit('messages', {
+        username: "Bot",
+        text: res.weather[0].description,
+        avatar: "img/robot.png",
+      });
+    }, function(error) {
+      client.emit('messages', {
+        username: "Bot",
+        text: error,
+        avatar: "img/robot.png",
+      });
+    })
+};
 
 var storeMessage = function(message) {
-  //messages.push({
   Messages.create({
     username: message['username'],
     text: message['text'],
@@ -51,6 +68,9 @@ function connCallBack(client) {
     if (processing.botMessage) {
       client.broadcast.emit('messages', processing.botMessage);
       client.emit('messages', processing.botMessage)
+      if (processing.botMessage.text === 'Fetching weather...') {
+        fetchWeather(client, 'weather');
+      }
     }
 
     storeMessage(message);

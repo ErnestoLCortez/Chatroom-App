@@ -65,12 +65,19 @@ export var ChatBot = {
   },
 
   botResponses: {
-    about: "Description of chat app",
+    about: "This is a chat room to discuss the weather.  Niiice.",
     invalid: "Unrecognized command",
-    help: "Available commands: about, help, say, hello",
+    help: "Available commands:\n" +
+      "about: gives a description of the channel\n" +
+      "help: list of commands\n" +
+      "say: bot parrots your words\n" +
+      "hello: say hello to chatbot\n" +
+      "bye: say bye to chatbot\n" +
+      "weather: get today's weather description\n",
     say: "",
     hello: "Hi, ",
     bye: "Bye, ",
+    weather: 'Fetching weather...',
   }
 
 
