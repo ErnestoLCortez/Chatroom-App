@@ -19,6 +19,20 @@ export var ChatBot = {
     var command = message.text;
     command = command.substring(2).trim();
 
+    if (command.substring(0, 3) === 'say') {
+      return {
+        username: "Bot",
+        text: command.substring(3).trim(),
+        avatar: "img/robot.png",
+      };
+    }
+    if (command === 'hello' || command === 'bye') {
+      return {
+        username: "Bot",
+        text: this.botResponses[command] + message.username + "!",
+        avatar: "img/robot.png",
+      };
+    }
     if (command in this.botResponses) {
       return {
         username: "Bot",
@@ -52,7 +66,11 @@ export var ChatBot = {
 
   botResponses: {
     about: "Description of chat app",
-    invalid: "Unrecognized command"
+    invalid: "Unrecognized command",
+    help: "Available commands: about, help, say, hello",
+    say: "",
+    hello: "Hi, ",
+    bye: "Bye, ",
   }
 
 

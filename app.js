@@ -10,6 +10,8 @@ var Messages = require('./src/data/Messages').Messages;
 
 var ChatBot = require('./src/bot/chatbot').ChatBot;
 
+
+
 var storeMessage = function(message) {
   //messages.push({
   Messages.create({
@@ -33,7 +35,9 @@ var retreiveMessages = function(client) {
 };
 
 var userList = {}
-io.on('connection', function(client) {
+io.on('connection', connCallBack);
+
+function connCallBack(client) {
 
 
   console.log('Client connected...');
@@ -76,12 +80,14 @@ io.on('connection', function(client) {
       io.emit('messages', ChatBot.userDisconnect(client.username));
     }
   });
-});
+};
 
 app.use(express.static(__dirname + '/public'));
-app.set('port', process.env.PORT);
-app.set('IP', process.env.IP)
+app.set('port', process.env.PORT || 8080);
+app.set('IP', process.env.IP || '0.0.0.0')
 
 server.listen(process.env.PORT, function() {
-  console.log('Server listening on port %d in %s mode', app.get('port'), app.get('env'));
+  console.log('Server listening on port %d in %s mode', app.get('port'), app.get('IP'));
 });
+
+module.exports = server;

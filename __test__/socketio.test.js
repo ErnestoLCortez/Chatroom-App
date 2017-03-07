@@ -1,18 +1,30 @@
+import {
+  server
+}
+from '../app';
+
 import * as SocketIO from 'socket.io-client';
 
+test('Join event via sockets', () => {
+  var Socket = SocketIO.connect('http://0.0.0.0:8080');
+  var done = false;
+  Socket.emit('join', {
+    username: 'testName',
+    avatar: 'testAvatar',
+  })
 
-var io = require('socket.io').listen(5000);
+  Socket.on('messages', function(object) {
+    expect(object).toEqual({
+      socketid: {
+        username: 'testName',
+        avatar: 'testAvatar'
+      }
+    });
 
-io.on('connection', function(client) {
-  client.emit('message', 'connected');
-});
-
-test('Connection to server via sockets', () => {
-  var Socket = SocketIO.connect('http://0.0.0.0:5000');
-  var x = "";
-  Socket.on('message', function(data) {
-    x = data;
-    expect(x).toBe('connected');
+    done = true;
   });
-
+  if (done) {
+    Socket.disconnect();
+    done();
+  }
 });
