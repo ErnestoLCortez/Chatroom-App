@@ -110,4 +110,4 @@ var Server = server.listen(process.env.PORT, function() {
   console.log('Server listening on port %d in %s mode', app.get('port'), app.get('IP'));
 });
 
-export default Server;
+module.exports = Server;

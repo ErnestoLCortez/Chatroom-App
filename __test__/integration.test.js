@@ -3,7 +3,7 @@ var Server;
 
 //Start server before each test
 beforeEach(() => {
-  Server = require('../app').default;
+  Server = require('../app');
 });
 //Close server after each test
 afterEach(() => {
