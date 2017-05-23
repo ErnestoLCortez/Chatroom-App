@@ -1,12 +1,14 @@
+if (process.env.NODE_ENV !== 'production') require('dotenv').config()
 require('babel-register');
 
-var Sequelize = require('sequelize');
+var mongoose = require('mongoose');
+mongoose.connect(process.env.MONGODB_URI);
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
-var Messages = require('./src/data/Messages').Messages;
+var Messages = require('./src/data/Messages');
 var ChatBot = require('./src/bot/chatbot').ChatBot;
 var weather = require('npm-openweathermap');
 var openweatherkey = require('./src/config').openweatherkey;
@@ -31,22 +33,21 @@ var fetchWeather = function(client, command) {
 };
 
 var storeMessage = function(message) {
-  Messages.create({
+
+  new Messages().save({
     username: message['username'],
     text: message['text'],
     avatar: message['avatar'],
-    time: Sequelize.fn('NOW'),
+    time: Date.now,
   });
 
 };
 
 var retreiveMessages = function(client) {
-  Messages.findAll({
-    limit: 10,
-    order: [
-      ['time', 'DESC']
-    ],
-  }).then(function(messages) {
+  Messages.find()
+  .sort({'time': -1})
+  .limit(10)
+  .exec(function(err, messages) {
     client.emit('initMessages', messages);
   });
 };
@@ -55,13 +56,9 @@ var userList = {}
 io.on('connection', connCallBack);
 
 function connCallBack(client) {
-
-
   console.log('Client connected...');
-  retreiveMessages(client);
 
   client.on('messages', function(message) {
-
 
     var processing = ChatBot.processMessage(message);
 
@@ -86,8 +83,7 @@ function connCallBack(client) {
       username: userInfo.username,
       avatar: userInfo.avatar
     }
-
-
+    retreiveMessages(client);
     io.emit('messages', ChatBot.userConnect(client.username));
     io.emit('userlist', userList);
 

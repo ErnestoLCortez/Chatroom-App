@@ -37,7 +37,7 @@ export class UserList extends React.Component {
       userList: list,
       userCount: Object.keys(list).length,
     });
-    console.log(list);
+
   }
 
   renderUserList() {
