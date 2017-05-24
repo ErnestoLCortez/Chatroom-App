@@ -6,8 +6,10 @@ module.exports = {
         app: "./src/Main.js"
     },
     output: {
-        filename: "public/js/bundle.js",
-        sourceMapFilename: "public/js/bundle.map"
+        path: path.join(__dirname, '/public/js/'),
+        publicPath: '/public/js/',
+        filename: 'bundle.js',
+        sourceMapFilename: 'public/js/bundle.map'
     },
     devtool: '#source-map',
 

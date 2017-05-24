@@ -1,5 +1,5 @@
-if (process.env.NODE_ENV !== 'production') require('dotenv').config()
 require('babel-register');
+if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
 var mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_URI);
@@ -34,11 +34,13 @@ var fetchWeather = function(client, command) {
 
 var storeMessage = function(message) {
 
-  new Messages().save({
+  new Messages({
     username: message['username'],
     text: message['text'],
     avatar: message['avatar'],
-    time: Date.now,
+    time: Date.now()
+  }).save(function(err){
+    if(err) console.log(err);
   });
 
 };
@@ -83,9 +85,9 @@ function connCallBack(client) {
       username: userInfo.username,
       avatar: userInfo.avatar
     }
-    retreiveMessages(client);
     io.emit('messages', ChatBot.userConnect(client.username));
     io.emit('userlist', userList);
+    retreiveMessages(client);
 
   });
 

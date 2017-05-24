@@ -66,10 +66,11 @@ export class Content extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleAuthenticate = this.handleAuthenticate.bind(this);
   }
 
   componentWillMount() {
-    Firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged((user) => {
       if(user){
         this.setState({ user });
         Socket.emit('join', {
@@ -136,8 +137,8 @@ export class Content extends React.Component {
           iconElementRight={this.state.user ?
             <FlatButton label="SignOut" onClick={this.logOut.bind(this)}/> :
             <div>
-              <FlatButton label="Login with FB" onClick={this.loginWithFacebook} />
-              <FlatButton label="Login with Google" onClick={this.loginWithGoogle} />
+              <FlatButton label="Login with FB" onClick={this.loginWithFacebook.bind(this)} />
+              <FlatButton label="Login with Google" onClick={this.loginWithGoogle.bind(this)} />
             </div>}
         />
         <br />
