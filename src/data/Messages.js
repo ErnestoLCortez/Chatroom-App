@@ -1,5 +1,3 @@
-//app/models/terasiteDB.js
-
 var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
