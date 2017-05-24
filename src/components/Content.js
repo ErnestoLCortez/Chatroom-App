@@ -68,42 +68,40 @@ export class Content extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentWillMount() {
+    Firebase.auth().onAuthStateChanged((user) => {
+      if(user){
+        this.setState({ user });
+        Socket.emit('join', {
+          username: this.state.user.email,
+          avatar: this.state.user.photoURL
+        });
+      } else {
+        this.setState({ user: null });
+      }
+    });
+  }
+
   loginWithFacebook() {
     var provider = new firebase.auth.FacebookAuthProvider();
-    firebase.auth().signInWithPopup(provider).then(function(result) {
-      var token = result.credential.accessToken;
-      this.setState({
-        user: result.user
-      });
-      this.handleAuthenticate();
-    }.bind(this));
-
+    this.handleAuthenticate(provider);
   }
 
   loginWithGoogle() {
     var provider = new firebase.auth.GoogleAuthProvider();
+    this.handleAuthenticate(provider);
+  }
+
+  handleAuthenticate(provider) {
     firebase.auth().signInWithPopup(provider).then(function(result) {
       var token = result.credential.accessToken;
-      this.setState({
-        user: result.user
-      });
-      this.handleAuthenticate();
     }.bind(this));
   }
 
-  handleAuthenticate() {
-    Socket.emit('join', {
-      username: this.state.user.email,
-      avatar: this.state.user.photoURL
-    })
-  }
-
   logOut() {
+    var email = this.state.user.email;
     firebase.auth().signOut().then(function() {
-      Socket.emit('disconnect', this.state.user.email)
-      this.setState({
-        user: null
-      });
+      Socket.emit('disconnect', email);
     }.bind(this));
   }
 
@@ -133,13 +131,13 @@ export class Content extends React.Component {
   render() {
     return (
       <div>
-        <AppBar 
+        <AppBar
           title="Cool Chat"
-          iconElementRight={this.state.user ? 
-            <FlatButton label="SignOut" onClick={this.logOut.bind(this)}/> : 
+          iconElementRight={this.state.user ?
+            <FlatButton label="SignOut" onClick={this.logOut.bind(this)}/> :
             <div>
-              <FlatButton label="Login with FB" onClick={this.loginWithFacebook.bind(this)} />
-              <FlatButton label="Login with Google" onClick={this.loginWithGoogle.bind(this)} />
+              <FlatButton label="Login with FB" onClick={this.loginWithFacebook} />
+              <FlatButton label="Login with Google" onClick={this.loginWithGoogle} />
             </div>}
         />
         <br />

@@ -56,13 +56,9 @@ var userList = {}
 io.on('connection', connCallBack);
 
 function connCallBack(client) {
-
-
   console.log('Client connected...');
-  retreiveMessages(client);
 
   client.on('messages', function(message) {
-
 
     var processing = ChatBot.processMessage(message);
 
@@ -87,8 +83,7 @@ function connCallBack(client) {
       username: userInfo.username,
       avatar: userInfo.avatar
     }
-
-
+    retreiveMessages(client);
     io.emit('messages', ChatBot.userConnect(client.username));
     io.emit('userlist', userList);
 
